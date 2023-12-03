@@ -63,6 +63,10 @@ namespace lifiCollisionTime
             XElement meinDatenpaketFilepath = loadXMLDataToXElement("lifiMeinDatenpaket.xml");
             double myVelocity = (double)meinDatenpaketFilepath.Element("auto").Element("geschwindigkeit");
             double myAcceleration = (double)meinDatenpaketFilepath.Element("auto").Element("beschleunigung");
+
+            // The Three Parts of a LINQ Query: Loading and processing of the data of neighbouring cars
+            // 1. Data source.
+            XElement datenpaketEmpfangen = loadXMLDataToXElement("lifiDatenpaketEmpfangen.xml");
         }
     }
 }
