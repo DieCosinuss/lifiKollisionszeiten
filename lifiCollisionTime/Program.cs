@@ -67,6 +67,9 @@ namespace lifiCollisionTime
             // The Three Parts of a LINQ Query: Loading and processing of the data of neighbouring cars
             // 1. Data source.
             XElement datenpaketEmpfangen = loadXMLDataToXElement("lifiDatenpaketEmpfangen.xml");
+
+            // 2. Query creation.
+            IEnumerable<XElement> autos = from item in datenpaketEmpfangen.Descendants("auto") select item;
         }
     }
 }
