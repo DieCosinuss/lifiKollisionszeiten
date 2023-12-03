@@ -51,6 +51,48 @@ namespace lifiCollisionTime
             return XElement.Load(datenpaket);
         }
 
+        static void checkForCollision(double currentAcceleration, double myAcceleration, double currentVelocity, double myVelocity, double currentDistance)
+        {
+            // Compute collision time according to physical newtons law
+            if (currentAcceleration != myAcceleration)
+            {
+                double Da = currentAcceleration - myAcceleration;
+                double Dv = currentVelocity - myVelocity;
+                double p = 2.0 * Dv / Da;
+                double q = 2.0 * currentDistance / Da;
+                double insideSqrt = p * p / 4.0 - q;
+                if (insideSqrt < 0.0)
+                {
+                    Console.WriteLine("Keine Kollision bevorstehend...");
+                }
+                else if (insideSqrt == 0.0)
+                {
+                    Console.WriteLine("Achtung: Kollision in ungefaehr {0} Sekunden...", -p / 2.0);
+                }
+                else
+                {
+                    double timeToCollision1 = -p / 2.0 + Math.Sqrt(insideSqrt);
+                    double timeToCollision2 = -p / 2.0 - Math.Sqrt(insideSqrt);
+                    if (timeToCollision1 >= 0.0 && timeToCollision2 >= 0.0)
+                    {
+                        Console.WriteLine("Achtung: Kollision in ungefaehr {0} Sekunden...", Math.Min(timeToCollision1, timeToCollision2));
+                    }
+                    else if ((timeToCollision1 >= 0.0 && timeToCollision2 <= 0.0) || (timeToCollision1 <= 0.0 && timeToCollision2 >= 0.0))
+                    {
+                        Console.WriteLine("Achtung: Kollision in ungefaehr {0} Sekunden...", Math.Max(timeToCollision1, timeToCollision2));
+                    }
+                    else
+                    {
+                        Console.WriteLine("Keine Kollision bevorstehend...");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Keine Kollision bevorstehend...");
+            }
+        }
+
         static void Main(string[] args)
         {
             // create xml-file for data of the current car
@@ -78,8 +120,8 @@ namespace lifiCollisionTime
                 double currentVelocity = (double)currentCar.Element("geschwindigkeit");
                 double currentAcceleration = (double)currentCar.Element("beschleunigung");
 
-                Console.WriteLine("Datensatz eines nahen Autos: Distanz={0,2}, Geschwindigkeit={1,2}, Beschleunigung={2,2}", 
-                    currentDistance, currentVelocity, currentAcceleration);
+                // Compute collision times according to newtons law
+                checkForCollision(currentAcceleration, myAcceleration, currentVelocity, myVelocity, currentDistance);
             }
 
             Console.ReadKey();
