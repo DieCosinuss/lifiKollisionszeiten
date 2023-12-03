@@ -70,6 +70,19 @@ namespace lifiCollisionTime
 
             // 2. Query creation.
             IEnumerable<XElement> autos = from item in datenpaketEmpfangen.Descendants("auto") select item;
+
+            // 3. Query execution.
+            foreach (XElement currentCar in autos)
+            {
+                double currentDistance = (double)currentCar.Element("distanz");
+                double currentVelocity = (double)currentCar.Element("geschwindigkeit");
+                double currentAcceleration = (double)currentCar.Element("beschleunigung");
+
+                Console.WriteLine("Datensatz eines nahen Autos: Distanz={0,2}, Geschwindigkeit={1,2}, Beschleunigung={2,2}", 
+                    currentDistance, currentVelocity, currentAcceleration);
+            }
+
+            Console.ReadKey();
         }
     }
 }
