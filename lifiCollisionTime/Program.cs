@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,6 +44,13 @@ namespace lifiCollisionTime
             andereVerkehrsteilnehmende.Save("lifiDatenpaketEmpfangen.xml");
         }
 
+        static XElement loadXMLDataToXElement(string filename)
+        {
+            var currentDirectory = Directory.GetCurrentDirectory();
+            var datenpaket = Path.Combine(currentDirectory, filename);
+            return XElement.Load(datenpaket);
+        }
+
         static void Main(string[] args)
         {
             // create xml-file for data of the current car
@@ -50,6 +58,11 @@ namespace lifiCollisionTime
 
             // Create xml-file for data of cars around
             createNeighbourCars();
+
+            // Loading my data
+            XElement meinDatenpaketFilepath = loadXMLDataToXElement("lifiMeinDatenpaket.xml");
+            double myVelocity = (double)meinDatenpaketFilepath.Element("auto").Element("geschwindigkeit");
+            double myAcceleration = (double)meinDatenpaketFilepath.Element("auto").Element("beschleunigung");
         }
     }
 }
